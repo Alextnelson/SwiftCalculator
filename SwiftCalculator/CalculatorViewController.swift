@@ -3,7 +3,7 @@
 //  SwiftCalculator
 //
 //  Created by Alexander Nelson on 5/17/16.
-//  Copyright © 2016 Jetwolfe Labs. All rights reserved.
+//  Copyright © 2016 JetWolfe Labs. All rights reserved.
 //
 
 import UIKit
@@ -11,7 +11,7 @@ import UIKit
 class CalculatorViewController: UIViewController {
 
     @IBOutlet weak var calculatorDisplay: UILabel!
-    var operandStack = Array<Double>()
+    var brain = CalculatorBrain()
     var userIsInTheMiddleOfTyping = false
 
     var calculatorDisplayValue: Double {
@@ -39,25 +39,27 @@ class CalculatorViewController: UIViewController {
     }
 
     @IBAction func operate(sender: UIButton) {
-        let operation = sender.currentTitle!
         if userIsInTheMiddleOfTyping {
             enter()
         }
-        switch operation {
-            case "✖️": performOperation {$0 * $1}
-            case "➗": performOperation {$1 / $0}
-            case "➖": performOperation {$1 - $0}
-            case "➕": performOperation {$0 + $1}
-            case "√": performOneValueOperation { sqrt($0)}
-        default: break
+        if let operation = sender.currentTitle! {
+            if let result = brain.performOperation(operation) {
+                calculatorDisplayValue = result
+            } else {
+                calculatorDisplayValue = 0
+            }
         }
+
     }
     
 
     @IBAction func enter() {
         userIsInTheMiddleOfTyping = false
-        operandStack.append(calculatorDisplayValue)
-        print("Digits Stack = \(operandStack)")
+        if let result = brain.pushOperand(calculatorDisplayValue) {
+            calculatorDisplayValue = result
+        } else {
+            calculatorDisplayValue
+        }
     }
 
     func performOperation(operation: (Double, Double) -> Double) {

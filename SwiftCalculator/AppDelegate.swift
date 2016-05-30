@@ -3,7 +3,7 @@
 //  SwiftCalculator
 //
 //  Created by Alexander Nelson on 5/17/16.
-//  Copyright © 2016 Jetwolfe Labs. All rights reserved.
+//  Copyright © 2016 JetWolfe Labs. All rights reserved.
 //
 
 import UIKit
